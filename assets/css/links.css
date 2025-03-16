@@ -11,8 +11,8 @@ button {
     outline: none;
     background-color: var(--font-color);
     color: var(--bg-color);
-    font-family: var(--font);
-    font-weight: bold;
+    font-family: var(--font-family);
+    font-weight: 700;
     font-size: var(--font-size);
     padding: 12px 24px;
     border-radius: 8px;

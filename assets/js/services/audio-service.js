@@ -15,7 +15,7 @@ class AudioService {
 
     static #createReverbNode = async () => {
         const newReverbNode = AudioService.context.createConvolver();
-        let response = await fetch('assets/audio/long-reverb.wav');
+        let response = await fetch('/audio/long-reverb.wav');
         let arrayBuffer = await response.arrayBuffer();
         await AudioService.context.decodeAudioData(
             arrayBuffer,

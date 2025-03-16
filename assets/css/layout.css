@@ -2,7 +2,7 @@ body {
     display: flex;
     flex-flow: column nowrap;
     gap: var(--gutter);
-    font-family: var(--font);
+    font-family: var(--font-family);
     background-color: var(--bg-color);
     color: var(--font-color);
     font-size: var(--font-size);
