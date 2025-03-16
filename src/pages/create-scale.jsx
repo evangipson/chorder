@@ -41,9 +41,10 @@ const CreateScale = () => {
                         <p>name: {scale.name}</p>
                         <p>notes: {noteList}</p>
                     </div>
-                    <Keyboard />
+                    <button onClick={() => AudioService.playScale(scale.notes)}>Replay Scale</button>
                 </>
             )}
+            <Keyboard />
         </>
     );
 };

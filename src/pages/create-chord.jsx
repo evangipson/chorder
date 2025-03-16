@@ -40,7 +40,7 @@ const CreateChord = () => {
                         <p>root: {chord.root.print()}</p>
                         <p>notes: {noteList}</p>
                     </div>
-                    <button onClick={() => AudioService.playChord(chord.notes)}>Play Chord</button>
+                    <button onClick={() => AudioService.playChord(chord.notes)}>Replay Chord</button>
                 </>
             )}
             <Keyboard />
