@@ -5,23 +5,29 @@ import Scale from '../types/scale';
 class AudioService {
     static context;
     static volume;
+    static reverbAudioBuffer;
 
     /* static initialization block, is run when the class is defined
      * and maintains 'this' references to statics */
     static {
         this.context = new (window.AudioContext)();
         this.volume = 0.1;
+
+        /* grab the reverb tail audio file only once during initialization */
+        fetch('/audio/long-reverb.wav')
+            .then(async reverbFile => await reverbFile.arrayBuffer())
+            .then(async arrayBuffer => {
+                this.reverbAudioBuffer = await this.context.decodeAudioData(arrayBuffer);
+            });
     }
 
     static #createReverbNode = async () => {
+        if (!AudioService.reverbAudioBuffer) {
+            return;
+        }
+
         const newReverbNode = AudioService.context.createConvolver();
-        let response = await fetch('/audio/long-reverb.wav');
-        let arrayBuffer = await response.arrayBuffer();
-        await AudioService.context.decodeAudioData(
-            arrayBuffer,
-            buffer => newReverbNode.buffer = buffer,
-            err => console.error('could not decode reverb', err)
-        );
+        newReverbNode.buffer = AudioService.reverbAudioBuffer;
         return newReverbNode;
     };
     
