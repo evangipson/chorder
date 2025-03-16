@@ -12,6 +12,7 @@ body {
     display: flex;
     flex-flow: column nowrap;
     gap: var(--gutter);
+    min-height: 100vh;
 }
 
 .chorder__body {
@@ -19,6 +20,7 @@ body {
     flex-flow: column nowrap;
     align-items: start;
     gap: var(--gutter);
+    flex: 1;
     margin: 0 auto;
     width: 100%;
     max-width: var(--site-width);

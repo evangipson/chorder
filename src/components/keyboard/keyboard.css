@@ -1,8 +1,8 @@
 :root {
-    --key-width: 24px;
-    --black-key-width: 12px;
-    --black-key-negative-space: -6px;
-    --keyboard-height: 130px;
+    --key-width: 6px;
+    --black-key-width: 3px;
+    --black-key-negative-space: -1.5px;
+    --keyboard-height: 50px;
 }
 
 .chorder__keyboard {
@@ -59,4 +59,47 @@
 .chorder__keyboard-key--active {
     background-color: blue;
     border: 1px solid white;
+}
+
+@media (min-width: 410px) {
+    :root {
+        --key-width: 8px;
+        --black-key-width: 4px;
+        --black-key-negative-space: -2px;
+        --keyboard-height: 80px;
+    }
+}
+
+@media (min-width: 520px) {
+    :root {
+        --key-width: 10px;
+        --black-key-width: 5px;
+        --black-key-negative-space: -2.5px;
+    }
+}
+
+@media (min-width: 768px) {
+    :root {
+        --key-width: 14px;
+        --black-key-width: 7px;
+        --black-key-negative-space: -3.5px;
+        --keyboard-height: 110px;
+    }
+}
+
+@media (min-width: 960px) {
+    :root {
+        --key-width: 18px;
+        --black-key-width: 8px;
+        --black-key-negative-space: -4px;
+    }
+}
+
+@media (min-width: 1200px) {
+    :root {
+        --key-width: 24px;
+        --black-key-width: 12px;
+        --black-key-negative-space: -6px;
+        --keyboard-height: 130px;
+    }
 }

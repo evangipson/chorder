@@ -1,6 +1,7 @@
 :root {
     --bg-color: #131313;
     --font-color: #ededed;
+    --highlight-color: color-mix(in srgb, var(--bg-color), var(--font-color) 25%);
     --font-family: "Ubuntu", sans-serif;
     --font-size: 20px;
     --site-width: 1200px;
