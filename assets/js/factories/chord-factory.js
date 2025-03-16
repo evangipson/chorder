@@ -2,6 +2,7 @@ import { allNotes } from '../constants/note-constants';
 import Chord from '../types/chord';
 import Note from '../types/note';
 
+/** Responsible for creating `Chord` objects. */
 class ChordFactory {
     /**
      * Creates a new `Chord` with the provided amount of `notes`.

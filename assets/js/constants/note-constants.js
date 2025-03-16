@@ -1,5 +1,6 @@
 import Note from '../types/note';
 
+/** All possible notes within one octave. */
 const allNotes = [
     new Note('C'),
     new Note('C', true),

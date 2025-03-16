@@ -56,8 +56,14 @@
     margin-left: var(--black-key-negative-space);
 }
 
-.chorder__keyboard-key--active {
-    background-color: blue;
+.chorder__keyboard-key--active,
+.chorder__keyboard-key--chord {
+    background-color: color-mix(in srgb, blue, transparent 15%);
+    border: 1px solid white;
+}
+
+.chorder__keyboard-key--melody {
+    background-color: color-mix(in srgb, red, transparent 15%);
     border: 1px solid white;
 }
 

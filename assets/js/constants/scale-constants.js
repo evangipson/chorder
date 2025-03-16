@@ -1,3 +1,4 @@
+/** Names and intervals for all the scale patterns that will be used throughout the application. */
 const scales = [
     {
         name: 'major',

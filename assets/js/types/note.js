@@ -1,12 +1,21 @@
+/** Represents a musical note. */
 class Note {
-    name;
-    sharp;
-    flat;
-    octave;
+    /** The reference note for determining semitone index for a `Note` */
+    static referenceNote = new Note('A');
+    /** The reference hertz value for determining hertz for a `Note` */
+    static referenceNoteHz = 440.0;
+
     #index;
     #hz;
-    static referenceNote = new Note('A');
-    static referenceNoteHz = 440.0;
+
+    /** The base name for this `Note` (won't contain sharp, flat, or octave). */
+    name;
+    /** Determines if this `Note` is sharp (up a semitone). */
+    sharp;
+    /** Determines if this `Note` is flat (down a semitone). */
+    flat;
+    /** Determines how high in register this `Note` is. */
+    octave;
 
     /**
      * Creates a new `Note`.
@@ -22,17 +31,19 @@ class Note {
         this.octave = octave;
     }
 
+    /** The relative semitone index for this `Note`. */
     get index() {
-        this.#index ??= this.findIndex();
+        this.#index ??= this.#findIndex();
         return this.#index;
     }
 
+    /** The hertz (rounded to 8 decimal places) for this `Note`. */
     get hz() {
-        this.#hz ??= this.findHz().toPrecision(8);
+        this.#hz ??= this.#findHz().toPrecision(8);
         return this.#hz;
     }
 
-    findIndex() {
+    #findIndex() {
         let basicIndex = 0;
         switch (this.name) {
             case 'D': basicIndex = 2; break;
@@ -55,7 +66,7 @@ class Note {
         return basicIndex;
     }
 
-    findHz() {
+    #findHz() {
         let distanceFromReference = 0;
         if (this.index != Note.referenceNote.index) {
             distanceFromReference = this.index > Note.referenceNote.index
@@ -75,6 +86,7 @@ class Note {
         return noteHz;
     };
 
+    /** Prints out the name along with flat and sharp symbols for this `Note` */
     print() {
         const flatSymbol = '♭';
         const sharpSymbol = '♯';

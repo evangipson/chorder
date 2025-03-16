@@ -4,6 +4,7 @@ import { getRandomElement } from '../extensions/collection-extensions';
 import Note from '../types/note';
 import Scale from '../types/scale';
 
+/** Responsible for creating `Scale` objects. */
 class ScaleFactory {
     /**
      * Creates a new `Scale` off the provided `rootNote`.

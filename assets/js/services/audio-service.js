@@ -2,9 +2,13 @@ import { getRandomElement } from '../extensions/collection-extensions';
 import Note from '../types/note';
 import Scale from '../types/scale';
 
+/** Responsible for playing audio throughout the application. */
 class AudioService {
+    /** @type {AudioContext} A `static`-initialized context for the whole `AudioService`. */
     static context;
+    /** @type {number} A `static`-initialized base volume for anything played through the `AudioService`. */
     static volume;
+    /** @type {AudioBuffer} A `static`-initialized reverb buffer filled with decoded audio data for the `AudioService`. */
     static reverbAudioBuffer;
 
     /* static initialization block, is run when the class is defined
@@ -77,19 +81,14 @@ class AudioService {
         keyboardElement?.dispatchEvent(musicKeyPressEvent);
     };
 
-    /**
-     * Sends an event containing information about the `note`
-     * and `duration` to the `<Keyboard>` React component.
-     * @param {Note} note 
-     * @param {number} duration 
-     */
-    static #sendKeyboardEvent = (note, duration) => {
+    static #sendKeyboardEvent = (note, duration, isChord) => {
         const keyboardElement = document.querySelector('.chorder__keyboard');
         const musicKeyPressEvent = new CustomEvent('musickeypress', {
             detail: {
                 note: `${note.print()}${note.octave}`,
-                duration: duration
-            }
+                duration: duration,
+                chord: isChord,
+            },
         });
         keyboardElement?.dispatchEvent(musicKeyPressEvent);
     };
@@ -113,7 +112,7 @@ class AudioService {
         AudioService.#setPostProcessingNodes(osc, duration);
 
         // send the keyboard event
-        AudioService.#sendKeyboardEvent(note, duration);
+        AudioService.#sendKeyboardEvent(note, duration, false);
 
         // play the note
         osc.start();
@@ -141,7 +140,7 @@ class AudioService {
             AudioService.#setPostProcessingNodes(osc, duration, volume);
 
             // send the keyboard event
-            AudioService.#sendKeyboardEvent(note, duration);
+            AudioService.#sendKeyboardEvent(note, duration, true);
 
             oscillators.push(osc);
         });
@@ -174,7 +173,7 @@ class AudioService {
      * @param {Chord} chord
      * @param {Scale} scale
      * @param {number} bpm
-     * @returns {Note[]} The phrase that was chosen to play.
+     * @returns {Promise<Note[]>} The phrase that was chosen to play.
      */
     static #playChordAndPhrase = async (chord, scale, bpm) => {
         /* play a melody over the `chord` */
@@ -256,7 +255,7 @@ class AudioService {
 
         let chordIndex = 0;
         while (AudioService.context.state != 'closed') {
-            const phrase = await AudioService.#playChordAndPhrase(chords[(chordIndex % chords.length + chords.length) % chords.length], scale, bpm);
+            await AudioService.#playChordAndPhrase(chords[(chordIndex % chords.length + chords.length) % chords.length], scale, bpm);
             chordIndex++;
         }
     };

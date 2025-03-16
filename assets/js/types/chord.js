@@ -1,9 +1,12 @@
 import Note from './note';
 
-/** Two or more `Note`s. */
+/** Represents two or more `Note` objects to be played in parallel. */
 class Chord {
+    /** The name of this `Chord`. */
     name;
+    /** The root `Note` of this `Chord`. */
     root;
+    /** All the `Note` objects in this `Chord`. */
     notes = [];
 
     /**

@@ -1,8 +1,10 @@
 import Note from './note';
 
-/** A series of `Note`s. */
+/** A series of `Note` objects to be played sequentially. */
 class Scale {
+    /** The name of this `Scale`. */
     name;
+    /** The collection of `Note` objects for this `Scale`. */
     notes;
 
     /**

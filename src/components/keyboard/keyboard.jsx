@@ -23,16 +23,13 @@ const setupKeyboardEventListener = () => {
     keyboardElement.addEventListener('musickeypress', musicKeyPressEvent => {
         const keyToHighlight = musicKeyPressEvent.detail.note;
         const timeToHighlight = musicKeyPressEvent.detail.duration;
-
+        const isChord = musicKeyPressEvent.detail.chord;
+        const classToAdd = isChord ? 'chorder__keyboard-key--chord' : 'chorder__keyboard-key--melody';
         const keyElement = keyboardElement.querySelector(`[data-key=${keyToHighlight}]`);
-        const keyIsAlreadyPressed = keyElement?.classList.contains('chorder__keyboard-key--active');
-        if (keyIsAlreadyPressed) {
-            return;
-        }
 
-        keyElement?.classList.add('chorder__keyboard-key--active');
+        keyElement?.classList.add(classToAdd);
         setTimeout(() => {
-            keyElement?.classList.remove('chorder__keyboard-key--active');
+            keyElement?.classList.remove(classToAdd);
         }, timeToHighlight * 1000);
     });
 };
