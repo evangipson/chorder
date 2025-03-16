@@ -1,0 +1,62 @@
+:root {
+    --key-width: 24px;
+    --black-key-width: 12px;
+    --black-key-negative-space: -6px;
+    --keyboard-height: 130px;
+}
+
+.chorder__keyboard {
+    display: flex;
+    flex-flow: row nowrap;
+    position: relative;
+    width: fit-content;
+    height: var(--keyboard-height);
+}
+
+.chorder__keyboard-key {
+    display: flex;
+    position: relative;
+    background-color: white;
+    color: white;
+    height: 100%;
+    width: var(--key-width);
+    border-right: 1px solid black;
+    box-sizing: border-box;
+}
+
+/* 
+.chorder__keyboard-key::before {
+    content: attr(data-key);
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: calc(50% - 8px);
+    font-size: 10px;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--font-color), transparent 50%);
+} */
+
+.chorder__keyboard-key:first-of-type {
+    border-left: 1px solid black;
+}
+
+.chorder__keyboard-key--flat,
+.chorder__keyboard-key--sharp {
+    background-color: black;
+    color: black;
+    height: 50%;
+    z-index: 1;
+    width: var(--black-key-width);
+}
+
+.chorder__keyboard-key--flat,
+.chorder__keyboard-key--sharp,
+.chorder__keyboard-key--flat + .chorder__keyboard-key,
+.chorder__keyboard-key--sharp + .chorder__keyboard-key {
+    margin-left: var(--black-key-negative-space);
+}
+
+.chorder__keyboard-key--active {
+    background-color: blue;
+    border: 1px solid white;
+}

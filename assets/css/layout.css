@@ -1,0 +1,27 @@
+body {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: var(--gutter);
+    font-family: var(--font);
+    background-color: var(--bg-color);
+    color: var(--font-color);
+    font-size: var(--font-size);
+}
+
+.chorder {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: var(--gutter);
+}
+
+.chorder__body {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: start;
+    gap: var(--gutter);
+    margin: 0 auto;
+    width: 100%;
+    max-width: var(--site-width);
+    padding: 0 16px;
+    box-sizing: border-box;
+}

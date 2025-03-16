@@ -1,0 +1,24 @@
+a, a:visited {
+    color: var(--font-color);
+}
+
+a:hover {
+    color: color-mix(in srgb, var(--font-color), var(--bg-color) 15%);
+}
+
+button {
+    display: flex;
+    outline: none;
+    background-color: var(--font-color);
+    color: var(--bg-color);
+    font-family: var(--font);
+    font-weight: bold;
+    font-size: var(--font-size);
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+button:hover {
+    text-decoration: underline;
+}

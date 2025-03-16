@@ -1,0 +1,16 @@
+.chorder__nav {
+    background-color: color-mix(in srgb, var(--bg-color), var(--font-color) 25%);
+    padding: 18px 0;
+}
+
+.chorder__nav-links {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: end;
+    gap: var(--gutter);
+    margin: 0 auto;
+    max-width: var(--site-width);
+    padding: 0 16px;
+    box-sizing: border-box;
+}

@@ -1,0 +1,8 @@
+:root {
+    --bg-color: #131313;
+    --font-color: #ededed;
+    --font: monospace;
+    --font-size: 20px;
+    --site-width: 1200px;
+    --gutter: 48px;
+}
