@@ -67,6 +67,11 @@ class Note {
     }
 
     #findHz() {
+        /* if we are getting hertz for an exact match of the reference note, short-circuit */
+        if (this.index == Note.referenceNote.index && this.octave == Note.referenceNote.octave) {
+            return Note.referenceNoteHz;
+        }
+
         let distanceFromReference = 0;
         if (this.index != Note.referenceNote.index) {
             distanceFromReference = this.index > Note.referenceNote.index

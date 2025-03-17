@@ -24,17 +24,17 @@
     box-sizing: border-box;
 }
 
-/* 
 .chorder__keyboard-key::before {
     content: attr(data-key);
-    display: block;
-    position: absolute;
-    top: 8px;
-    left: calc(50% - 8px);
-    font-size: 10px;
+    display: flex;
+    flex: 1;
+    align-items: start;
+    justify-content: center;
+    position: static;
+    font-size: 6px;
     text-transform: uppercase;
-    color: color-mix(in srgb, var(--font-color), transparent 50%);
-} */
+    color: color-mix(in srgb, black, transparent 50%);
+}
 
 .chorder__keyboard-key:first-of-type {
     border-left: 1px solid black;
@@ -44,9 +44,14 @@
 .chorder__keyboard-key--sharp {
     background-color: black;
     color: black;
-    height: 50%;
+    height: 55%;
     z-index: 1;
     width: var(--black-key-width);
+}
+
+.chorder__keyboard-key--flat::before,
+.chorder__keyboard-key--sharp::before {
+    color: color-mix(in srgb, white, transparent 50%);
 }
 
 .chorder__keyboard-key--flat,
@@ -56,15 +61,12 @@
     margin-left: var(--black-key-negative-space);
 }
 
-.chorder__keyboard-key--active,
 .chorder__keyboard-key--chord {
-    background-color: color-mix(in srgb, blue, transparent 15%);
-    border: 1px solid white;
+    background-color: blue;
 }
 
 .chorder__keyboard-key--melody {
-    background-color: color-mix(in srgb, red, transparent 15%);
-    border: 1px solid white;
+    background-color: red;
 }
 
 @media (min-width: 410px) {
@@ -104,8 +106,8 @@
 @media (min-width: 1200px) {
     :root {
         --key-width: 24px;
-        --black-key-width: 12px;
-        --black-key-negative-space: -6px;
+        --black-key-width: 14px;
+        --black-key-negative-space: -7px;
         --keyboard-height: 130px;
     }
 }

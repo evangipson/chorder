@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Note from '../../../assets/js/types/note';
 import { allNotes } from '../../../assets/js/constants/note-constants';
 import './keyboard.css';
+
+let removeChordKeyTimeout;
+let removeMelodyKeyTimeout;
 
 const getAllKeys = () => {
     const allKeys = [];
@@ -23,12 +26,15 @@ const setupKeyboardEventListener = () => {
     keyboardElement.addEventListener('musickeypress', musicKeyPressEvent => {
         const keyToHighlight = musicKeyPressEvent.detail.note;
         const timeToHighlight = musicKeyPressEvent.detail.duration;
+        const keyElement = keyboardElement.querySelector(`[data-key=${keyToHighlight}]`);
         const isChord = musicKeyPressEvent.detail.chord;
         const classToAdd = isChord ? 'chorder__keyboard-key--chord' : 'chorder__keyboard-key--melody';
-        const keyElement = keyboardElement.querySelector(`[data-key=${keyToHighlight}]`);
+        let timeout = isChord ? removeChordKeyTimeout : removeMelodyKeyTimeout;
 
         keyElement?.classList.add(classToAdd);
-        setTimeout(() => {
+
+        timeout && clearTimeout(timeout);
+        timeout = setTimeout(() => {
             keyElement?.classList.remove(classToAdd);
         }, timeToHighlight * 1000);
     });
@@ -38,7 +44,8 @@ const setupKeyboardStopEventListener = () => {
     const keyboardElement = document.querySelector('.chorder__keyboard');
     keyboardElement.addEventListener('musickeysdone', () => {
         const keyElements = keyboardElement.querySelectorAll(`[data-key]`);
-        keyElements.forEach(key => key.classList.remove('chorder__keyboard-key--active'));
+        keyElements.forEach(key => key.classList.remove('chorder__keyboard-key--chord'));
+        keyElements.forEach(key => key.classList.remove('chorder__keyboard-key--melody'));
     });
 };
 

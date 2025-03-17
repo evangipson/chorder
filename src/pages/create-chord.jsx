@@ -2,9 +2,10 @@ import { useMemo, useState } from 'react';
 import { allNotes } from '../../assets/js/constants/note-constants';
 import { getRandomElement } from '../../assets/js/extensions/collection-extensions';
 import ChordFactory from '../../assets/js/factories/chord-factory';
-import Note from '../../assets/js/types/note';
-import Keyboard from '../components/keyboard/keyboard';
 import AudioService from '../../assets/js/services/audio-service';
+import Note from '../../assets/js/types/note';
+import Controls from '../components/controls/controls';
+import Keyboard from '../components/keyboard/keyboard';
 
 const CreateChord = () => {
     const [ chord, setChord ] = useState({});
@@ -32,7 +33,7 @@ const CreateChord = () => {
     return (
         <>
             <h1>Create a Chord</h1>
-            <button onClick={createNewChord}>Create Chord</button>
+            <Controls playButtonText='Create Chord' onPlay={createNewChord} />
             {!!chord.notes?.length && (
                 <>
                     <div>
