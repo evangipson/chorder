@@ -7,10 +7,10 @@ const App = () => {
   return (
     <div className='chorder'>
       <Nav />
-      <Sidebar />
       <main className='chorder__body'>
         <AppRoutes />
       </main>
+      <Sidebar />
       <Footer />
     </div>
   )
