@@ -6,7 +6,7 @@ import Radio from '../pages/radio';
 
 const AppRoutes = () => {
     return (
-        <Routes basename={process.env.PUBLIC_URL}>
+        <Routes>
             <Route path='/' element={<Home />} />
             <Route path='/create-chord' element={<CreateChord />} />
             <Route path='/create-scale' element={<CreateScale />} />

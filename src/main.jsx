@@ -6,6 +6,7 @@ import '../assets/css/reset.css';
 import '../assets/css/properties.css';
 import '../assets/css/layout.css';
 import '../assets/css/links.css';
+import '../assets/css/inputs.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

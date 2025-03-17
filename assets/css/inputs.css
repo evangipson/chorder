@@ -1,0 +1,40 @@
+.chorder__input {
+    display: flex;
+    flex-flow: column nowrap;
+    gap: 8px;
+    width: 100%;
+}
+
+.chorder__input-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.chorder__input-range {
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    background-color: var(--highlight-color);
+    box-shadow: inset attr(data-range-fill px) 0 0 0 var(--bg-color);
+    border-radius: 8px;
+    accent-color: var(--bg-color);
+}
+
+.chorder__input-range::-webkit-slider-runnable-track {
+    appearance: none;
+    width: 10px;
+    height: 16px;
+    margin-top: -1px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.chorder__input-range::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 16px;
+    background: var(--font-color);
+    cursor: pointer;
+    border-radius: 4px;
+}
