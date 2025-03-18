@@ -8,10 +8,12 @@ class AudioService {
     static context;
     /** @type {GainNode} A `static`-initialized gain node to control the overall playback volume. */
     static mainGain;
+    /** @type {ConvolverNode} A `static`-initialized reverb node to control the overall playback reverb. */
+    static mainReverb;
+    /** @type {BiquadFilterNode} A `static`-initialized biquad filter node to control the overall warmness of the tone. */
+    static mainBiquadFilter;
     /** @type {number} The volume (from 0.0 to 0.1) of the overall playback. */
     static #volume;
-    /** @type {AudioBuffer} A `static`-initialized reverb buffer filled with decoded audio data for the `AudioService`. */
-    static reverbAudioBuffer;
 
     /* static initialization block, is run when the class is defined
      * and maintains 'this' references to statics */
@@ -20,61 +22,35 @@ class AudioService {
         this.context = new (window.AudioContext)();
         this.#volume = 0.1;
 
-        /* hook up the main gain node to control overall volume */
-        this.mainGain = this.context.createGain();
-        this.mainGain.gain.setValueAtTime(this.#volume, this.context.currentTime);
-        this.mainGain.connect(this.context.destination);
-
-        /* grab the reverb tail audio file only once during initialization */
+        /* only initialize the main reverb node and download it's audio data once */
+        this.mainReverb = this.context.createConvolver();
         fetch('/audio/long-reverb.wav')
             .then(async reverbFile => await reverbFile.arrayBuffer())
-            .then(async arrayBuffer => {
-                this.reverbAudioBuffer = await this.context.decodeAudioData(arrayBuffer);
-            });
+            .then(async arrayBuffer => await this.context.decodeAudioData(arrayBuffer))
+            .then(buffer => this.mainReverb.buffer = buffer);
+
+        /* create one overall gain node to control the whole app's volume */
+        this.mainGain = this.context.createGain();
+        this.mainGain.gain.setValueAtTime(this.#volume, this.context.currentTime);
+
+        /* create the filtering node that lives right after the source oscillators */
+        this.mainBiquadFilter = this.context.createBiquadFilter();
+        this.mainBiquadFilter.type = 'lowpass';
+        this.mainBiquadFilter.frequency.setValueAtTime(1200, this.context.currentTime);
+        this.mainBiquadFilter.gain.setValueAtTime(100, this.context.currentTime);
+
+        /* [other osc] -> biquad -> reverb -> gain -> speakers */
+        this.mainBiquadFilter.connect(this.mainGain);
+        this.mainGain.connect(this.mainReverb);
+        this.mainReverb.connect(this.context.destination);
     }
 
-    static #createReverbNode = async () => {
-        if (!AudioService.reverbAudioBuffer) {
-            return;
-        }
+    static #setPostProcessingNodes = (oscillatorNode) => {
+        // connect up the oscillator node (osc -> reverb -> gain -> destination)
+        oscillatorNode.connect(AudioService.mainBiquadFilter);
 
-        const newReverbNode = AudioService.context.createConvolver();
-        newReverbNode.buffer = AudioService.reverbAudioBuffer;
-        return newReverbNode;
-    };
-    
-    static #createGainNode = () => {
-        const newGainNode = AudioService.context.createGain();
-        newGainNode.gain.setValueAtTime(1.0, AudioService.context.currentTime);
-        return newGainNode;
-    };
-    
-    static #setFadesOnGainNode = (gainNode, duration = 1, relativeVolume = 1.0) => {
-        gainNode.gain.setValueAtTime(Number.EPSILON, AudioService.context.currentTime);
-        gainNode.gain.linearRampToValueAtTime(relativeVolume, AudioService.context.currentTime + (duration / 10));
-        gainNode.gain.setValueAtTime(relativeVolume, AudioService.context.currentTime + ((duration / 10) + 0.01));
-        gainNode.gain.linearRampToValueAtTime(Number.EPSILON, AudioService.context.currentTime + (duration - 0.01));
-    };
-
-    static #setPostProcessingNodes = async (oscillatorNode, duration, volume) => {
-        // instantiate gain and reverb nodes for the note
-        const gainNode = AudioService.#createGainNode();
-        const reverbNode = await AudioService.#createReverbNode();
-
-        // set up the gain node to fade
-        AudioService.#setFadesOnGainNode(gainNode, duration, volume);
-
-        // connect up the nodes (osc -> reverb -> gain -> destination)
-        oscillatorNode.connect(gainNode);
-        gainNode.connect(reverbNode);
-        reverbNode.connect(AudioService.mainGain);
-
-        // handle disconnection when the nodes are done
-        reverbNode.addEventListener('ended', () => {
-            oscillatorNode.disconnect(gainNode);
-            gainNode.disconnect(reverbNode);
-            reverbNode.disconnect(AudioService.mainGain);
-        });
+        // handle disconnection when the the oscillator is done
+        oscillatorNode.addEventListener('ended', () => oscillatorNode.disconnect(AudioService.mainBiquadFilter));
     };
 
     static #getQuarterNoteSeconds = (bpm) => {
@@ -138,7 +114,7 @@ class AudioService {
             }
         }
 
-        AudioService.playChord(chord.notes, totalPhraseTime, 0.5);
+        AudioService.playChord(chord.notes, totalPhraseTime);
         for (let note in notes) {
             if (AudioService.context.state == 'closed') {
                 return;
@@ -176,10 +152,27 @@ class AudioService {
         /* re-create the new context */
         AudioService.context = new (window.AudioContext)();
 
+        /* only initialize the main reverb node and download it's audio data once */
+        AudioService.mainReverb = AudioService.context.createConvolver();
+        fetch('/audio/long-reverb.wav')
+            .then(async reverbFile => await reverbFile.arrayBuffer())
+            .then(async arrayBuffer => await AudioService.context.decodeAudioData(arrayBuffer))
+            .then(buffer => AudioService.mainReverb.buffer = buffer);
+
         /* hook up a new main gain node to control overall volume */
         AudioService.mainGain = AudioService.context.createGain();
         AudioService.mainGain.gain.setValueAtTime(AudioService.#volume, AudioService.context.currentTime);
-        AudioService.mainGain.connect(AudioService.context.destination);
+
+        /* create the filtering node that lives right after the source oscillators */
+        AudioService.mainBiquadFilter = AudioService.context.createBiquadFilter();
+        AudioService.mainBiquadFilter.type = 'lowpass';
+        AudioService.mainBiquadFilter.frequency.setValueAtTime(200, AudioService.context.currentTime);
+        AudioService.mainBiquadFilter.gain.setValueAtTime(100, AudioService.context.currentTime);
+
+        /* [other osc] -> biquad -> reverb -> gain -> speakers */
+        AudioService.mainBiquadFilter.connect(AudioService.mainGain);
+        AudioService.mainGain.connect(AudioService.mainReverb);
+        AudioService.mainReverb.connect(AudioService.context.destination);
     };
 
     /**
@@ -204,7 +197,7 @@ class AudioService {
         osc.frequency.value = note.hz;
 
         // hook up post-processing
-        AudioService.#setPostProcessingNodes(osc, duration);
+        AudioService.#setPostProcessingNodes(osc);
 
         // send the keyboard event
         AudioService.#sendKeyboardEvent(note, duration, false);
@@ -218,9 +211,8 @@ class AudioService {
      * Plays the `notes` all together, using only one gain node for the whole chord.
      * @param {Note[]} notes 
      * @param {number} duration
-     * @param {number} relativeVolume
      */
-    static playChord = async (notes, duration = 1, relativeVolume = 1.0) => {
+    static playChord = async (notes, duration = 1) => {
         // instantiate oscillators for each note
         AudioService.#reinitializeContext();
         const oscillators = [];
@@ -230,7 +222,7 @@ class AudioService {
             osc.frequency.value = note.hz;
 
             // hook up post-processing
-            AudioService.#setPostProcessingNodes(osc, duration, relativeVolume);
+            AudioService.#setPostProcessingNodes(osc);
 
             // send the keyboard event
             AudioService.#sendKeyboardEvent(note, duration, true);
