@@ -1,0 +1,15 @@
+.chorder__chord {
+    display: flex;
+    flex-flow: column wrap;
+    gap: 4px;
+    font-size: 18px;
+}
+
+.chorder__chord-root {
+    font-size: 48px;
+    font-weight: bold;
+}
+
+.chorder__chord-notes {
+    color: color-mix(in srgb, var(--bg-color), var(--font-color) 80%);
+}

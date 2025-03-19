@@ -6,6 +6,7 @@ import AudioService from '../../assets/js/services/audio-service';
 import Note from '../../assets/js/types/note';
 import Controls from '../components/controls/controls';
 import Keyboard from '../components/keyboard/keyboard';
+import './create-chord.css';
 
 const CreateChord = () => {
     const [ chord, setChord ] = useState({});
@@ -33,18 +34,17 @@ const CreateChord = () => {
     return (
         <>
             <h1>Create a Chord</h1>
-            <Controls playButtonText='Create Chord' onPlay={createNewChord} />
-            {!!chord.notes?.length && (
-                <>
-                    <div>
-                        <p>name: {chord.name}</p>
-                        <p>root: {chord.root.print()}</p>
-                        <p>notes: {noteList}</p>
-                    </div>
-                    <button onClick={() => AudioService.playChord(chord.notes)}>Replay Chord</button>
-                </>
-            )}
+            <Controls playButtonText='Create Chord'
+                onPlay={createNewChord}
+                replayButtonText={chord.notes?.length && 'Replay Chord'}
+                onReplay={() => chord.notes?.length && AudioService.playChord(chord.notes)} />
             <Keyboard />
+            {chord &&
+                <div className='chorder__chord'>
+                    {!!noteList.length && <p className='chorder__chord-root'>{chord.symbolName}</p>}
+                    {!!noteList.length && <p className='chorder__chord-notes'>({chord.fullName}) {noteList}</p>}
+                </div>
+            }
         </>
     );
 };
